@@ -1,24 +1,21 @@
 import threading
-from flask import Flask
 import asyncio
-import main   # import your main.py file
+from flask import Flask
+import main
 
-# -----------------------
-#  Start your bot/server
-# -----------------------
-def start_bot():
-    asyncio.run(main.main())
-
-# -----------------------
-#  Dummy web server
-# -----------------------
 app = Flask(__name__)
 
 @app.route("/")
 def home():
     return "Bot is running on Render!"
 
-# -----------------------
-#  Start both (bot + web)
-# -----------------------
-threading.Thread(target=start_bot).start()
+def start_bot():
+    asyncio.run(main.main())
+
+if __name__ == "__main__":
+    # Start bot in background
+    bot_thread = threading.Thread(target=start_bot)
+    bot_thread.start()
+
+    # Start web server for Render always on
+    app.run(host="0.0.0.0", port=10000)
