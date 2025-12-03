@@ -1,7 +1,7 @@
 from flask import Flask
 import threading
 import asyncio
-import main   # your bot code
+import main
 
 app = Flask(__name__)
 
@@ -13,12 +13,10 @@ def start_bot():
     try:
         asyncio.run(main.main())
     except RuntimeError:
-        # If event loop already running (common in Render workers)
         loop = asyncio.get_event_loop()
         loop.create_task(main.main())
 
 if __name__ == "__main__":
-    # Start Bot in separate thread
     threading.Thread(target=start_bot).start()
 
     import os
